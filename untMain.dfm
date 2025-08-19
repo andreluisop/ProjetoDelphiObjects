@@ -3,7 +3,7 @@ object frmMain: TfrmMain
   Top = 0
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
-  Caption = 'Cadastros de Pedidos'
+  Caption = 'Cadastros e Pesquisa de Pedidos'
   ClientHeight = 552
   ClientWidth = 634
   Color = clBtnFace
@@ -29,7 +29,6 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 599
     object tbsPedidos: TTabSheet
       Caption = '&Cadastrar Pedidos'
       object pnlPrincipal: TPanel
@@ -40,7 +39,6 @@ object frmMain: TfrmMain
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 591
         object pnlDados: TPanel
           Left = 0
           Top = 0
@@ -49,7 +47,6 @@ object frmMain: TfrmMain
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitWidth = 591
           object pnlCabecalho: TPanel
             Left = 0
             Top = 0
@@ -58,7 +55,6 @@ object frmMain: TfrmMain
             Align = alTop
             BevelOuter = bvNone
             TabOrder = 0
-            ExplicitWidth = 591
             object lblClienteNome: TLabel
               Left = 74
               Top = 21
@@ -229,7 +225,6 @@ object frmMain: TfrmMain
             RowSelect = True
             TabOrder = 1
             ViewStyle = vsReport
-            ExplicitWidth = 591
           end
           object pnlRodape: TPanel
             Left = 0
@@ -239,7 +234,6 @@ object frmMain: TfrmMain
             Align = alBottom
             BevelOuter = bvNone
             TabOrder = 2
-            ExplicitWidth = 591
             object lblTotalRodape: TLabel
               Left = 0
               Top = 0
@@ -271,7 +265,6 @@ object frmMain: TfrmMain
             Align = alBottom
             BevelOuter = bvLowered
             TabOrder = 3
-            ExplicitWidth = 591
             object btnEditarItem: TButton
               AlignWithMargins = True
               Left = 40
