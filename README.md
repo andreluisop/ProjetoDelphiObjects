@@ -1,7 +1,3 @@
-# Projeto em Delphi:
-#   Orientação de Objetos
-#   Orientação de Interface
-#   Padrão MVC 
-#   Arquitetura em Camadas
-#   Clean Code
-Projeto de Teste Delphi
+# Projeto: Delphi
+
+Projeto Desenvolvido em Delphi, aplicando as técnicas de programação orientada a objetos e programação orientada a interface, padrão MVC, arquitetura em camadas e clean code.
