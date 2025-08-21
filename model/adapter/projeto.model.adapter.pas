@@ -1,9 +1,10 @@
-unit untAdapter;
+unit projeto.model.adapter;
 
 interface
 
 uses
-  untDTOInterfaces, untEntityInterfaces;
+  projeto.model.dto.interfaces,
+  projeto.model.entity.interfaces;
 
 type
 
@@ -30,6 +31,10 @@ type
   end;
 
 implementation
+
+uses
+  projeto.model.entity,
+  projeto.model.dto;
 
 class function TAdapterProduto.EntityToDto(const pEntity: IEntityProduto): IProdutoDTO;
 begin

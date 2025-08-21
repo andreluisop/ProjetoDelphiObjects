@@ -1,61 +1,21 @@
-unit untCtrlInterfaces;
+unit projeto.controller.pedido;
 
 interface
 
 uses
-  SysUtils, untEntityInterfaces, untDTOInterfaces, untConnection, untDAOInterfaces;
+  SysUtils,
+  projeto.controller.interfaces,
+  projeto.model.connection.interfaces,
+  projeto.model.entity.interfaces,
+  projeto.model.dto.interfaces,
+  projeto.model.dao.interfaces;
 
 type
-
-  ICtrlProduto = interface
-    function Retorna(const pCodigo: Integer): IProdutoDTO;
-    function Listar: ILstProdutoDTO;
-  end;
-
-  ICtrlCliente = interface
-    function Retorna(const pCodigo: Integer): IClienteDTO;
-    function Listar: ILstClienteDTO;
-  end;
-
-  ICtrlPedido = interface
-    function Retorna(const pCodigo: Integer): IPedidoDTO;
-    function Listar(const pCodPessoa: Integer = 0): ILstPedidoDTO;
-    function RetornarItemPorCodigo(const pCodigo: Integer): IPedidoItemDTO;
-    function RetornarItens(const pCodigo: Integer): ILstPedidoItensDTO;
-    function RetornarItensCompletos(const pCodigo: Integer): ILstPedidoItensDTO;
-    function CalcularTotal(const pLista: IEntityLstPedidoItens): Currency;
-    procedure Cancelar(const pCodigo: Integer);
-    procedure EditarItem(const pItem: IEntityPedidoItem);
-    procedure Salvar(const pPedido: IEntityPedido);
-  end;
-
-  TCtrlCliente = class(TinterfacedObject, ICtrlCliente)
-  strict private
-    FClienteDao: iClienteDao;
-  private
-    constructor Create(const pConexao: IConnection);
-  public
-    function Retorna(const pCodigo: Integer): IClienteDTO;
-    function Listar: ILstClienteDTO;
-    class function New(const pConexao: IConnection): ICtrlCliente;
-  end;
-
-  TCtrlProduto = class(TinterfacedObject, ICtrlProduto)
-  strict private
-    FProdutoDao: IProdDAO;
-  private
-    constructor Create(const pConexao: IConnection);
-  public
-    function Retorna(const pCodigo: Integer): IProdutoDTO;
-    function Listar: ILstProdutoDTO;
-    class function New(const pConexao: IConnection): ICtrlProduto;
-  end;
-
   TCtrlPedido = class(TinterfacedObject, ICtrlPedido)
-  strict private
+  private
     FPedidoDao: IPedidoDAO;
     FQuery: IQuery;
-  private
+
     constructor Create(const pConexao: IConnection);
   public
     function Retorna(const pCodigo: Integer): IPedidoDTO;
@@ -64,58 +24,20 @@ type
     function RetornarItens(const pCodigo: Integer): ILstPedidoItensDTO;
     function RetornarItensCompletos(const pCodigo: Integer): ILstPedidoItensDTO;
     function CalcularTotal(const pLista: IEntityLstPedidoItens): Currency;
+
     procedure Cancelar(const pCodigo: Integer);
     procedure EditarItem(const pItem: IEntityPedidoItem);
     procedure Salvar(const pPedido: IEntityPedido);
+
     class function New(const pConexao: IConnection): ICtrlPedido;
   end;
 
 implementation
 
 uses
-  untAdapter;
-
-constructor TCtrlCliente.Create(const pConexao: IConnection);
-begin
-  inherited Create;
-  Self.FClienteDao := TClienteDao.New(pConexao);
-end;
-
-function TCtrlCliente.Listar: ILstClienteDTO;
-begin
-  Result := TAdapterCliente.LstEntityToLstDto(FClienteDao.Listar);
-end;
-
-class function TCtrlCliente.New(const pConexao: IConnection): ICtrlCliente;
-begin
-  Result := Self.Create(pConexao);
-end;
-
-function TCtrlCliente.Retorna(const pCodigo: Integer): IClienteDTO;
-begin
-  Result := TAdapterCliente.EntityToDto(FClienteDao.RetornarPorCodigo(pCodigo));
-end;
-
-constructor TCtrlProduto.Create(const pConexao: IConnection);
-begin
-  inherited Create;
-  Self.FProdutoDao := TProdDAO.New(pConexao);
-end;
-
-function TCtrlProduto.Listar: ILstProdutoDTO;
-begin
-  Result := TAdapterProduto.LstEntityToLstDto(FProdutoDao.Listar);
-end;
-
-class function TCtrlProduto.New(const pConexao: IConnection): ICtrlProduto;
-begin
-  Result := Self.Create(pConexao);
-end;
-
-function TCtrlProduto.Retorna(const pCodigo: Integer): IProdutoDTO;
-begin
-  Result := TAdapterProduto.EntityToDto(FProdutoDao.RetornarPorCodigo(pCodigo));
-end;
+  projeto.model.dao.pedido,
+  projeto.model.adapter,
+  projeto.model.connection.firedac.query;
 
 function TCtrlPedido.CalcularTotal(const pLista: IEntityLstPedidoItens): Currency;
 begin

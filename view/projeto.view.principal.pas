@@ -1,16 +1,15 @@
-unit untMain;
+unit projeto.view.principal;
 
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
-  Vcl.ExtCtrls, System.UITypes,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, System.UITypes,
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
   FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
-  FireDAC.Phys, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
-  untCtrlInterfaces, untEntityInterfaces, Vcl.Mask;
+  FireDAC.Phys, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client, Vcl.Mask,
+  projeto.controller.interfaces,
+  projeto.model.entity.interfaces;
 
 type
   TfrmMain = class(TForm)
@@ -56,32 +55,27 @@ type
     procedure btncancelarItemClick(Sender: TObject);
     procedure edtValorUnitarioKeyPress(Sender: TObject; var Key: Char);
   private
-    { Private declarations }
-
     FCtrlPedido: ICtrlPedido;
     FCtrlCliente: ICtrlCliente;
     FCtrlProduto: ICtrlProduto;
-
     FLstItens: IEntityLstPedidoItens;
+
+    function FormToEntity: IEntityPedido;
+    function RetNumero(Key: Char; Texto: string; EhDecimal: Boolean): Char;
 
     procedure Inicializar;
     procedure PreencherComboCliente;
     procedure PreencherComboProduto;
-
     procedure LimparCliente;
     procedure LimparProduto;
-
-    function FormToEntity: IEntityPedido;
     procedure FormAddProduto;
     procedure AtualizaTotal;
     procedure MsgWarning(const pTexto: String);
-
     procedure PrepararFormAposFinalizar;
     procedure DeletarItemLista;
     procedure AtualizarItemDaLista;
     procedure ExibirBotaoCancelar;
     procedure EditandoItem(const pEmEdicao: Boolean);
-    function RetNumero(Key: Char; Texto: string; EhDecimal: Boolean): Char;
   public
     { Public declarations }
   end;
@@ -91,10 +85,16 @@ var
 
 implementation
 
-{$R *.dfm}
-
 uses
-  untConnection, untPedido;
+  projeto.view.pedido,
+  projeto.model.entity,
+  projeto.model.connection.firedac,
+  projeto.model.connection.interfaces,
+  projeto.controller.cliente,
+  projeto.controller.pedido,
+  projeto.controller.produto;
+
+{$R *.dfm}
 
 procedure TfrmMain.AtualizarItemDaLista;
 var

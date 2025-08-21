@@ -1,13 +1,11 @@
-unit untPedido;
+unit projeto.view.pedido;
 
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
-  Vcl.ExtCtrls,
-  untCtrlInterfaces;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls,
+  projeto.controller.interfaces;
 
 type
   TfrmVisualPedidos = class(TForm)
@@ -25,21 +23,14 @@ type
     procedure btnPesquisarClick(Sender: TObject);
     procedure lvPedidosChange(Sender: TObject; Item: TListItem; Change: TItemChange);
   private
-    { Private declarations }
-
     FCtrlPedido: ICtrlPedido;
     FCtrlCliente: ICtrlCliente;
     FCtrlProduto: ICtrlProduto;
-
     procedure ResfreshGrade;
   public
-    { Public declarations }
-
     procedure putCtrlPedido(const pCtrl: ICtrlPedido);
     procedure putCtrlCliente(const pCtrl: ICtrlCliente);
-
     procedure Inicializar;
-
     procedure PreencherComboCliente;
     procedure CarregarDados;
     procedure CarregarItens(const pCod: Integer);
@@ -50,10 +41,10 @@ var
 
 implementation
 
-{$R *.dfm}
-
 uses
-  untEntityInterfaces, untDTOInterfaces;
+  projeto.model.dto.interfaces;
+
+{$R *.dfm}
 
 procedure TfrmVisualPedidos.btnPesquisarClick(Sender: TObject);
 var

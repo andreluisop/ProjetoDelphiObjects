@@ -127,21 +127,31 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="untMain.pas">
+        <DCCReference Include="view\projeto.view.principal.pas">
             <Form>frmMain</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="untEntityInterfaces.pas"/>
-        <DCCReference Include="untPedido.pas">
+        <DCCReference Include="view\projeto.view.pedido.pas">
             <Form>frmVisualPedidos</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="untCtrlInterfaces.pas"/>
-        <DCCReference Include="untDTOInterfaces.pas"/>
-        <DCCReference Include="untDAOInterfaces.pas"/>
-        <DCCReference Include="untAdapter.pas"/>
-        <DCCReference Include="untConnection.pas"/>
-        <DCCReference Include="untConsts.pas"/>
+        <DCCReference Include="model\dao\projeto.model.dao.consts.pas"/>
+        <DCCReference Include="controller\projeto.controller.cliente.pas"/>
+        <DCCReference Include="controller\projeto.controller.interfaces.pas"/>
+        <DCCReference Include="controller\projeto.controller.pedido.pas"/>
+        <DCCReference Include="controller\projeto.controller.produto.pas"/>
+        <DCCReference Include="model\adapter\projeto.model.adapter.pas"/>
+        <DCCReference Include="model\connection\projeto.model.connection.firedac.pas"/>
+        <DCCReference Include="model\connection\projeto.model.connection.firedac.query.pas"/>
+        <DCCReference Include="model\connection\projeto.model.connection.interfaces.pas"/>
+        <DCCReference Include="model\dao\projeto.model.dao.cliente.pas"/>
+        <DCCReference Include="model\dao\projeto.model.dao.interfaces.pas"/>
+        <DCCReference Include="model\dao\projeto.model.dao.pedido.pas"/>
+        <DCCReference Include="model\dao\projeto.model.dao.produto.pas"/>
+        <DCCReference Include="model\dto\projeto.model.dto.interfaces.pas"/>
+        <DCCReference Include="model\dto\projeto.model.dto.pas"/>
+        <DCCReference Include="model\entity\projeto.model.entity.interfaces.pas"/>
+        <DCCReference Include="model\entity\projeto.model.entity.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -171,13 +181,13 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="5">
-                <DeployFile LocalName="Win32\Debug\Projeto.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="Win32\Debug\Projeto.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Projeto.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Projeto.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="Win32\Debug\Projeto.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>

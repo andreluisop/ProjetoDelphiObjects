@@ -1,66 +1,20 @@
-unit untDAOInterfaces;
+unit projeto.model.dao.pedido;
 
 interface
 
 uses
-  untEntityInterfaces, untDTOInterfaces, System.SysUtils, untConnection;
+  System.SysUtils,
+  projeto.model.dao.interfaces,
+  projeto.model.connection.interfaces,
+  projeto.model.dto.interfaces,
+  projeto.model.entity.interfaces;
 
 type
-
-  IProdDAO = interface
-    function RetornarPorCodigo(const pCodigo: Integer): IEntityProduto;
-    function Listar: IEntityLstProduto;
-  end;
-
-  IClienteDAO = interface
-    function RetornarPorCodigo(const pCodigo: Integer): IEntityCliente;
-    function Listar: IEntityLstCliente;
-  end;
-
-  IPedidoDAO = interface
-    function RetornarPorCodigo(const pCodigo: Integer): IEntityPedido;
-    function Listar(const pCodPessoa: Integer): IEntityLstPedido;
-    function RetornarItens(const pCodigo: Integer): IEntityLstPedidoItens;
-    function RetornarItensCompleto(const pCodigo: Integer): ILstPedidoItensDTO;
-    function RetornarItemPorCodigo(const pCodigo: Integer): IEntityPedidoItem;
-    function Salvar(const pPedido: IPedidoDTO): Integer;
-    procedure Cancelar(const pCodigo: Integer);
-    procedure CancelarItens(const pCodigo: Integer);
-    procedure EditarItem(const pItem: IPedidoItemDTO);
-    procedure SalvarItem(const pItem: IPedidoItemDTO);
-  end;
-
-  TClienteDAO = class(TInterfacedObject, IClienteDAO)
-  strict private
-    FConn: IConnection;
-    FQuery: IQuery;
-  private
-    constructor Create(const pConexao: IConnection);
-    function CriaCliente(const pCod: Integer; const pNome, pCidade, pUf: String): IEntityCliente;
-  public
-    function RetornarPorCodigo(const pCodigo: Integer): IEntityCliente;
-    function Listar: IEntityLstCliente;
-    class function New(const pConexao: IConnection): IClienteDAO;
-  end;
-
-  TProdDAO = class(TInterfacedObject, IProdDAO)
-  strict private
-    FConn: IConnection;
-    FQuery: IQuery;
-  private
-    constructor Create(const pConexao: IConnection);
-    function CriaProd(const pCod: Integer; const pDesc: String; const pPreco: Currency): IEntityProduto;
-  public
-    function RetornarPorCodigo(const pCodigo: Integer): IEntityProduto;
-    function Listar: IEntityLstProduto;
-    class function New(const pConexao: IConnection): IProdDAO;
-  end;
-
   TPedidoDAO = class(TInterfacedObject, IPedidoDAO)
-  strict private
+  private
     FConn: IConnection;
     FQuery: IQuery;
-  private
+
     constructor Create(const pQuery: IQuery);
 
     function CriarPedidoItem(const pCod, pCodPedido, pCodProd, pQtd: Integer; pVlrUnit, pVlrTotal: Currency; const pDesc: String): IEntityPedidoItem;
@@ -85,108 +39,10 @@ type
 implementation
 
 uses
-  untConsts;
-
-constructor TClienteDao.Create(const pConexao: IConnection);
-begin
-  inherited Create;
-  Self.FConn := pConexao;
-  Self.FQuery := TOFDQuery.New(pConexao);
-end;
-
-function TClienteDao.Listar: IEntityLstCliente;
-begin
-  Result := TEntityLstCliente.New;
-  with Self.FQuery.Open(_SEL_CLIENTE, []) do
-  begin
-    while not Eof do
-    begin
-      Result.AddItem(CriaCliente(FieldByName('CODCLIENTE').AsInteger,
-                                 FieldByName('NOME').AsString,
-                                 FieldByName('CIDADE').AsString,
-                                 FieldByName('UF').AsString));
-      Next;
-    end;
-  end;
-end;
-
-class function TClienteDao.New(const pConexao: IConnection): IClienteDAO;
-begin
-  Result := Self.Create(pConexao);
-end;
-
-function TClienteDao.RetornarPorCodigo(const pCodigo: Integer): IEntityCliente;
-begin
-  Result := TEntityCliente.New;
-  with Self.FQuery.Open(Format(_SEL_CLIENTE + _COND_CLIENTE, [pCodigo]), []) do
-  begin
-    if not IsEmpty then
-    begin
-      Result.codigo := FieldByName('CODCLIENTE').AsInteger;
-      Result.nome := FieldByName('NOME').AsString;
-      Result.cidade := FieldByName('CIDADE').AsString;
-      Result.uf := FieldByName('UF').AsString;
-    end;
-  end;
-end;
-
-function TClienteDao.CriaCliente(const pCod: Integer; const pNome, pCidade, pUf: String): IEntityCliente;
-begin
-  Result := TEntityCliente.New;
-  Result.codigo := pCod;
-  Result.nome := pNome;
-  Result.cidade := pCidade;
-  Result.uf := pUf;
-end;
-
-constructor TProdDAO.Create(const pConexao: IConnection);
-begin
-  inherited Create;
-  Self.FConn := pConexao;
-  Self.FQuery := TOFDQuery.New(pConexao);
-end;
-
-function TProdDAO.Listar: IEntityLstProduto;
-begin
-  Result := TEntityLstProduto.New;
-  with Self.FQuery.Open(_SEL_PRODUTO, []) do
-  begin
-    while not Eof do
-    begin
-      Result.AddItem(CriaProd(FieldByName('CODPRODUTO').AsInteger,
-                              FieldByName('DESPRODUTO').AsString,
-                              FieldByName('VLRVENDA').AsCurrency));
-      Next;
-    end;
-  end;
-end;
-
-class function TProdDAO.New(const pConexao: IConnection): IProdDAO;
-begin
-  Result := Self.Create(pConexao);
-end;
-
-function TProdDAO.RetornarPorCodigo(const pCodigo: Integer): IEntityProduto;
-begin
-  Result := TEntityProduto.New;
-  with Self.FQuery.Open(Format(_SEL_PRODUTO + _COND_PRODUTO, [pCodigo]), []) do
-  begin
-    if not IsEmpty then
-    begin
-      Result.codigo := FieldByName('CODPRODUTO').AsInteger;
-      Result.descricao := FieldByName('DESPRODUTO').AsString;
-      Result.precoVenda := FieldByName('VLRVENDA').AsCurrency;
-    end;
-  end;
-end;
-
-function TProdDAO.CriaProd(const pCod: Integer; const pDesc: String; const pPreco: Currency): IEntityProduto;
-begin
-  Result := TEntityProduto.New;
-  Result.codigo := pCod;
-  Result.descricao := pDesc;
-  Result.precoVenda := pPreco;
-end;
+  projeto.model.dao.consts,
+  projeto.model.connection.firedac.query,
+  projeto.model.entity,
+  projeto.model.dto;
 
 procedure TPedidoDao.Cancelar(const pCodigo: Integer);
 begin
